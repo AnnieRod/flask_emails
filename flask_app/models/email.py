@@ -40,6 +40,14 @@ class Mail:
     @staticmethod
     def validate_email(email):
         is_valid = True
+        ##BONUS NINJA: Valida si el email ya existe
+        query = "SELECT * FROM emails WHERE address = %(address)s;"
+        coincidence = connectToMySQL('email_validation').query_db(query, email)
+        if len(coincidence) >= 1:
+            flash ("Invalid email, address already registered...")
+            is_valid = False
+            return is_valid
+            
         if not EMAIL_REGEX.match(email['address']):
             flash("Email is not valid!")
             is_valid = False
